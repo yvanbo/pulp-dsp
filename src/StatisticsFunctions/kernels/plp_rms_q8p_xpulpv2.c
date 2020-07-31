@@ -50,18 +50,19 @@ void plp_rms_q8p_xpulpv2(void *task_args) {
     plp_rms_instance_q8 *S = (plp_rms_instance_q8 *) task_args;
 
     uint32_t blockSizeP = ((S->blockSize + S->nPE - 1) / S->nPE);
+    uint32_t blockSizeC = blockSizeP;
 
     /* if it is the last core, use remainder of blocksize */
     if (rt_core_id() == (S->nPE - 1)) {
         if( S->blockSize % S->nPE ) {
-            blockSizeP = S->blockSize % blockSizeP;
+            blockSizeC = S->blockSize % blockSizeP;
         }
     }
 
-    int8_t *pSrc = S->pSrc + (rt_core_id() * S->blockSize);
+    int8_t *pSrc = (S->)pSrc + (rt_core_id() * blockSizeP);
     int8_t *pRes = S->pRes + rt_core_id();
 
-    plp_rms_q8s_xpulpv2(pSrc, blockSizeP, S->fracBits, pRes);
+    plp_rms_q8s_xpulpv2(pSrc, blockSizeC, S->fracBits, pRes);
 
     /* Set barrier for completion in all cores */
     rt_team_barrier();
