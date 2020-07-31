@@ -3232,6 +3232,29 @@ void plp_rms_q8s_xpulpv2(const int8_t *__restrict__ pSrc,
                          int8_t *__restrict__ pRes);
 
 /** -------------------------------------------------------
+   @brief         Glue code for RMS value of a 8-bit fixed point vector.
+   @param[in]     pSrc       points to the input vector
+   @param[in]     blockSize  number of samples in input vector
+   @param[in]     fracBits   number of fractional bits
+   @param[in]     nPE        number of cores to compute on
+   @param[out]    pRes    RMS value returned here
+   @return        none
+ */
+void plp_rms_q8_parallel(const int8_t *__restrict__ pSrc,
+                         const uint32_t blockSize,
+                         const uint32_t fracBits,
+                         const uint8_t nPE,
+                         int8_t *__restrict__ pRes);
+
+/** -------------------------------------------------------
+  @brief Setup code for parallel RMS calculation of 8-bit fixed point vector for XPULPV2 extension.
+  @param[in]  task_args  pointer to plp_rms_instance_q8 struct initialized by
+                         plp_rms_q8_parallel
+  @return     none
+ */
+void plp_rms_q8p_xpulpv2(void *task_args);
+
+/** -------------------------------------------------------
     @brief      Glue code for square root of a 32-bit fixed point number.
     @param[in]  in   32-Bit input integer
     @param[out] out  Square root of the input
