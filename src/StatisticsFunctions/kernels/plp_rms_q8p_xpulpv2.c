@@ -59,7 +59,7 @@ void plp_rms_q8p_xpulpv2(void *task_args) {
         }
     }
 
-    int8_t *pSrc = (S->)pSrc + (rt_core_id() * blockSizeP);
+    int8_t *pSrc = S->pSrc + (rt_core_id() * blockSizeP);
     int8_t *pRes = S->pRes + rt_core_id();
 
     plp_rms_q8s_xpulpv2(pSrc, blockSizeC, S->fracBits, pRes);
