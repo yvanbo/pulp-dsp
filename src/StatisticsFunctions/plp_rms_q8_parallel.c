@@ -87,11 +87,8 @@ void plp_rms_q8_parallel(const int8_t *__restrict__ pSrc,
     } else {
 
         /* Calculate block size per core and allocate buffers for result */
-        int8_t *resBuf;
-
         if (nPE > 1) {
             resultsBuffer = (int8_t *) rt_alloc(RT_ALLOC_CL_DATA, sizeof(int8_t) * nPE);
-            resBuf = resultsBuffer;
         } else {
             resultsBuffer = pRes;
         }
@@ -116,6 +113,7 @@ void plp_rms_q8_parallel(const int8_t *__restrict__ pSrc,
             }
 
             *pRes = accu / nPE;
+            rt_free(RT_ALLOC_CL_DATA, resultsBuffer, sizeof(int8_t) * nPE);
         } else {
             *pRes = *resultsBuffer;
         }
