@@ -1305,17 +1305,15 @@ typedef struct {
 } plp_mat_copy_stride_instance_i32;
 
 /** -------------------------------------------------------
- * @brief Instance structure for floating-point parallel strided matrix copy.
+ * @brief Instance structure for 8-bit precision parallel RMS calculation.
  */
 typedef struct {
-    const float *__restrict__ pSrc;
-    uint32_t M;
-    uint32_t N;
-    uint32_t strideSrc;
-    uint32_t strideDst;
-    uint32_t nPE;
-    float *__restrict__ pDst;
-} plp_mat_copy_stride_instance_f32;
+    const int8_t *__restrict__ pSrc;
+    uint32_t blockSize;
+    uint32_t fracBits;
+    int8_t *__restrict__ pRes;
+    uint8_t nPE;
+} plp_rms_instance_q8;
 
 /** -------------------------------------------------------
     @brief Glue code for parallel dot product of 32-bit integer vectors.
