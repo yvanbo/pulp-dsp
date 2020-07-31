@@ -74,11 +74,30 @@ void plp_rms_q8s_rv32im(const int8_t *__restrict__ pSrc,
                         uint32_t fracBits,
                         int8_t *__restrict__ pRes) {
     int32_t accu = 0;
-    int32_t temp;
-    for (int i = 0; i < blockSize; i++) {
-        temp = (*pSrc++);
-        accu += ((temp * temp) >> fracBits);
+    int32_t temp1, temp2;
+
+#if defined(PLP_MATH_LOOPUNROLL)
+
+    for (int i = 0; i < (blockSize >> 1); i++) {
+        temp1 = (*pSrc++);
+        temp2 = (*pSrc++);
+        accu += ((temp1 * temp1) >> fracBits);
+        accu += ((temp2 * temp2) >> fracBits);
     }
+
+    if (blockSize % 2 == 1) {
+        temp1 = (*pSrc++);
+        accu += ((temp1 * temp1) >> fracBits);
+    }
+
+#else // PLP_MATH_LOOPUNROLL
+
+    for (int i = 0; i < blockSize; i++) {
+        temp1 = (*pSrc++);
+        accu += ((temp1 * temp1) >> fracBits);
+    }
+
+#endif // PLP_MATH_LOOPUNROLL
 
     *pRes = accu / blockSize;
 }
